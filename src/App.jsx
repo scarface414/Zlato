@@ -3,6 +3,7 @@ import Header from "./components/Header";
 import PriceBox from "./components/PriceBox";
 import RatioBox from "./components/RatioBox";
 import Footer from "./components/Footer";
+import InfoBox from "./components/InfoBox"
 import HistoricalChart from './components/HistoricalChart';
 import './index.css';
 
@@ -34,7 +35,15 @@ function App() {
         <PriceBox priceData={silverPriceData} />
         <RatioBox ratioData={gold_silver_ratio} />
       </div>
-      {/* <HistoricalChart ratioData={gold_silver_ratio} /> */}
+      <div className="grid grid-cols-1 lg:grid-cols-3">
+        <div className="lg:col-span-2">
+          <HistoricalChart ratioData={gold_silver_ratio} />
+        </div>
+        <div className="w-full">
+          <InfoBox />
+        </div>
+        {/* <InfoBox /> */}
+      </div>
       <Footer />
     </div>
   );

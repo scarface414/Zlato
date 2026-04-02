@@ -3,8 +3,6 @@ import { TrendingUp, TrendingDown } from "lucide-react";
 
 const PriceBox = ({priceData}) => {
 
-
-
     return (
           <div
             className="bg-white border border-zinc-200 rounded-lg shadow-sm p-6 transition-all duration-300 hover:shadow-md hover:-translate-y-1"

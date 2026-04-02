@@ -44,8 +44,6 @@ const RatioBox = ({ratioData}) => {
         ];
     };
 
-    console.log("RatioBox received ratioData:", ratioData)
-
 
     return (
         <div
