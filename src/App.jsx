@@ -18,7 +18,7 @@ function App() {
   const silverPriceData = {
     metal: "Silver",
     price_inr: 245,   // per kilogram
-    change_24h: 3.2      // mostly flat in latest data
+    change_24h: -2.4      // mostly flat in latest data
   };
 
   const gold_silver_ratio = {
