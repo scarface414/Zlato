@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Header from "./components/Header";
 import PriceBox from "./components/PriceBox";
 import RatioBox from "./components/RatioBox";
@@ -9,21 +9,50 @@ import './index.css';
 
 
 function App() {
-  const goldPriceData = {
-    metal: "Gold",
-    price_inr: 14500,   // per 10 grams (24K approx)
-    change_24h: 1.2      // example recent daily movement (positive trend)
+
+  const fetchMetalPrices = async () => {
+    const symbols = ["XAU", "XAG"];
+
+    try {
+      const responses = await Promise.all(
+        symbols.map(symbol => fetch(`/api/fetch-data?targetSymbol=${symbol}`))
+      );
+
+      const [goldData, silverData] = await Promise.all(
+        responses.map(res => {
+          if (!res.ok) throw new Error(`Failed to fetch ${res.url}`);
+          return res.json();
+        })
+      );
+
+      console.log("Prices Synced:", { goldData, silverData });
+      return { goldData, silverData };
+
+    } catch (error) {
+      console.error("Backend Error:", error);
+    }
   };
 
-  const silverPriceData = {
-    metal: "Silver",
-    price_inr: 245,   // per kilogram
-    change_24h: -2.4      // mostly flat in latest data
-  };
+  const [prices, setPrices] = useState({ gold: null, silver: null, loading: true });
+
+  useEffect(() => {
+    const loadData = async () => {
+      const data = await fetchMetalPrices();
+      if (data) {
+        setPrices({
+          gold: data.goldData,
+          silver: data.silverData,
+          loading: false
+        });
+      }
+    };
+
+    loadData();
+  }, []);
 
   const gold_silver_ratio = {
-    gold_silver_ratio: 59,  // 145000 / 2450 (per 10g vs 10g equivalent silver)
-    status: "silver_underpriced" // silver relatively cheaper vs gold historically
+    gold_silver_ratio: 59,
+    status: "silver_underpriced"
   };
 
   return (
@@ -31,8 +60,8 @@ function App() {
       <Header />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-        <PriceBox priceData={goldPriceData} />
-        <PriceBox priceData={silverPriceData} />
+        <PriceBox priceData={prices.gold} />
+        <PriceBox priceData={prices.silver} />
         <RatioBox ratioData={gold_silver_ratio} />
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-3">

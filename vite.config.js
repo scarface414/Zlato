@@ -10,6 +10,12 @@ export default defineConfig({
   ],
   server: {
     open: true, // opens browser automatically
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3000', // The port where your Vercel dev or Node server runs
+        changeOrigin: true,
+      },
+    },
   },
   resolve: {
     alias: {
